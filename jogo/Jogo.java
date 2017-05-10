@@ -1,81 +1,6 @@
-<<<<<<< HEAD
 package jogo;
 
-import java.util.ArrayList;
-
-import jogador.Jogador;
-
-public class Jogo {
-	
-	//Atributos
-	private int numJogadores;
-	private int jogadorDaVez;
-	private ArrayList<Jogador> jogadores;
-	private Boolean jogoAcabou;
-	private Jogador vencedor;
-	private Jogador perdedor;
-	
-	public void iniciaJogo()
-	{
-		
-	}
-	
-	public Boolean jogoNaoAcabou()
-	{
-		return true;
-	}
-	
-	public void setFimJogo()
-	{
-		
-	}
-	
-	public void incrementaJogadorDaVez()
-	{
-		this.jogadorDaVez = (this.jogadorDaVez)%this.numJogadores;
-	}
-	
-	public Jogador proximoJogador()
-	{
-		return this.jogadores.get((jogadorDaVez+1) % this.numJogadores);
-	}
-	
-	public Jogador jogadorAtual()
-	{
-		return this.jogadores.get(jogadorDaVez);
-	}
-	
-	public Jogador jogadorAnterior()
-	{
-		return this.jogadores.get((jogadorDaVez-1) % this.numJogadores);
-	}
-
-	public void setVencedor(Jogador j)
-	{
-		this.vencedor = j;
-	}
-	
-	public void setPerdedor(Jogador j)
-	{
-		this.perdedor = j;
-	}
-	
-	public void showVencedor()
-	{
-		System.out.println("****VENCEDOR*****");
-		System.out.println("Jogador: "+ this.vencedor.getId());
-		System.out.println("******************");
-	}
-
-	public void showPerdedor()
-	{
-		System.out.println("****PERDEDOR*****");
-		System.out.println("Jogador: "+ this.perdedor.getId());
-		System.out.println("******************");
-	}
-}
-=======
-package jogo;
+import baralho.BaralhoSelecionado;
 
 public class Jogo {
 
@@ -86,15 +11,28 @@ public class Jogo {
 	Jogador vencedor;
 	Jogador perdedor;
 
-	public Jogo () {
+	public Jogo (int qntd) {
 		
+		num_jogadores = qntd;
+		jogadores = new Jogador[qntd+1];
+		jogo_acabou = false;
+		jogador_da_vez = 1;
+		vencedor = jogadores[0];				
+		perdedor = jogadores[0];	
+
+		BaralhoSelecionado aux = new BaralhoSelecionado(qntd*3);
+
+		Dealer dealer = new Dealer();
+		dealer.insereAsDeEspadas(aux);
+		dealer.embaralhaBaralho(aux);
+		jogadores[1].recebeCarta(dealer.darUmaCarta(aux));
 		
-		
-	}
-	
-	public void iniciaJogo () {
-		
-		
+		for (int i=1;i<=num_jogadores;++i) {
+			jogadores[i].setID(i);
+			jogadores[i].recebeCarta(dealer.darUmaCarta(aux));
+			jogadores[i].recebeCarta(dealer.darUmaCarta(aux));
+			jogadores[i].recebeCarta(dealer.darUmaCarta(aux));
+		}
 	}
 	
 	public boolean jogoNaoAcabou () {
@@ -141,5 +79,35 @@ public class Jogo {
 		
 		this.perdedor = aux;
 	}
+	
+	public Jogador showVencedor () {
+		
+		System.out.print(this.vencedor.getID());
+		return this.vencedor;
+	}
+	
+	public Jogador showPerdedor () {
+		
+		System.out.print(this.perdedor.getID());
+		return this.perdedor;
+	}
+	
+	public void iniciaJogo () {
+		
+		this.proximoJogador().recebeCarta (this.jogadorAtual().passaCarta());
+		this.incrementaJogadorDaVez ();
+		while (this.jogoNaoAcabou()) {
+
+			this.proximoJogador().recebeCarta (this.jogadorAtual().passaCarta());
+
+			if (this.jogadorAtual().estaBatido()) {
+
+				this.setVencedor(this.jogadorAtual());
+				this.setPerdedor(this.jogadorAnterior());
+				this.setFimDeJogo();
+			}
+			else this.incrementaJogadorDaVez();
+		}
+				
+	}
 }
->>>>>>> 7daf9a106d18229805262cc9eff1637803776ecd
