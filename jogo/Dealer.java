@@ -3,7 +3,12 @@ package jogo;
 import baralho.Baralho;
 
 public class Dealer {
-	Baralho baralho;
+	static Baralho baralho;
+	
+	public static void insereAsDeEspadas()
+	{
+		
+	}
 	
 	
 }
