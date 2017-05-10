@@ -27,12 +27,12 @@ public class Carta {
 		this.valor = i;
 	}
 
-	int getNype() {
+	public int getNype() {
 		
 		return this.nype;
 	}
 	
-	int getValor() {
+	public int getValor() {
 		
 		return this.valor;
 	}
