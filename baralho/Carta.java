@@ -1,26 +1,40 @@
 package baralho;
 
 public class Carta {
-	//Atributos
-	private int numero;
-	private String naipe;
+
+	private int valor;
+	private int nype;
 	
-	//Métodos
-	
-	public int getNumero() {
-		return numero;
+	public Carta () {
+		
+		valor = 0;
+		nype = 0;
 	}
 	
-	public void setNumero(int numero) {
-		this.numero = numero;
+	public Carta (int i, int j) {
+		
+		valor = i;
+		nype = j;
 	}
 	
-	public String getNaipe() {
-		return naipe;
+	void setNype(int i) {
+		
+		this.nype = i;
 	}
 	
-	public void setNaipe(String naipe) {
-		this.naipe = naipe;
+	void setValor(int i) {
+		
+		this.valor = i;
+	}
+
+	int getNype() {
+		
+		return this.nype;
+	}
+	
+	int getValor() {
+		
+		return this.valor;
 	}
 	
 }
