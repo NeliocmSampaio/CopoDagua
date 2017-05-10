@@ -17,12 +17,12 @@ public class Carta {
 		nype = j;
 	}
 	
-	void setNype(int i) {
+	public void setNype(int i) {
 		
 		this.nype = i;
 	}
 	
-	void setValor(int i) {
+	public void setValor(int i) {
 		
 		this.valor = i;
 	}
