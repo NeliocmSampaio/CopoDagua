@@ -1,55 +1,133 @@
-<<<<<<< HEAD
 package jogo;
 
 import java.util.ArrayList;
 
+import jogador.Cpu;
 import jogador.Jogador;
+import jogador.Player;
+import miscelania.DoubleIdentifiedObject;
+import baralho.Carta;
 
-public class Jogo {
+public class Jogo extends AbstractJogo{
 	
 	//Atributos
-	private int numJogadores;
-	private int jogadorDaVez;
 	private ArrayList<Jogador> jogadores;
-	private Boolean jogoAcabou;
 	private Jogador vencedor;
 	private Jogador perdedor;
+	private DoubleIdentifiedObject asDeEspadas;
 	
-	public void iniciaJogo()
+	public Jogo(int nJogadores)
 	{
-		
-	}
-	
-	public Boolean jogoNaoAcabou()
-	{
-		return true;
-	}
-	
-	public void setFimJogo()
-	{
-		
-	}
-	
-	public void incrementaJogadorDaVez()
-	{
-		this.jogadorDaVez = (this.jogadorDaVez)%this.numJogadores;
-	}
-	
-	public Jogador proximoJogador()
-	{
-		return this.jogadores.get((jogadorDaVez+1) % this.numJogadores);
-	}
-	
-	public Jogador jogadorAtual()
-	{
-		return this.jogadores.get(jogadorDaVez);
-	}
-	
-	public Jogador jogadorAnterior()
-	{
-		return this.jogadores.get((jogadorDaVez-1) % this.numJogadores);
-	}
+		this.jogadores = new ArrayList<Jogador>();
+		this.vencedor = null;
+		this.perdedor = null;
+		this.asDeEspadas = new Carta();
+		asDeEspadas.setValor("A");
+		asDeEspadas.setNome("Espadas");
 
+		for(int i=0; i<nJogadores; i++)
+		{
+			Jogador j = new Player(i);
+			this.jogadores.add(j);
+		}//for
+				
+		preparaJogo();
+	}
+	
+	public Jogo(int nJogadores, int nCPUs)
+	{
+		this.jogadores = new ArrayList<Jogador>();
+		this.vencedor = null;
+		this.perdedor = null;
+		this.asDeEspadas = new Carta();
+		asDeEspadas.setValor("A");
+		asDeEspadas.setNome("Espadas");
+		
+		for(int i=0; i<nJogadores-nCPUs; i++)
+		{
+			Jogador j = new Player(i);
+			this.jogadores.add(j);
+		}//for
+		
+		for(int i=nJogadores-nCPUs; i<nJogadores; i++)
+		{
+			Jogador j = new Cpu(i);
+			this.jogadores.add(j);
+		}//for
+		
+		preparaJogo();
+	}
+	
+	private void preparaJogo() {
+		
+		Dealer.distribuiCartas(jogadores);
+	}
+	
+	private int numDeJogadores () {
+		
+		return jogadores.size();
+	}
+	
+	private void showJogadores(Jogador atual) {
+		
+		System.out.println("Jogador " + atual.getId());
+		//System.out.println("num jogadores: " + numDeJogadores());
+	}
+	
+	public void jogar()
+	{
+		boolean jogoAcabou = false;
+		
+		while(!jogoAcabou) {
+			
+			for (int i=0; i<numDeJogadores(); i++) {
+				
+				int j = (i + 1)%numDeJogadores();
+				
+				Jogador atual = jogadores.get(i);
+				Jogador proximo = jogadores.get(j);
+				
+				showJogadores(atual);
+				
+				int index;
+				
+				if (atual.estaImpedido()) {
+					
+					atual.showMaoDeCartas();
+					do {
+						index = atual.selecionaCarta(); 
+						
+					} while (atual.getCarta(index).getValor() == asDeEspadas.getValor() && atual.getCarta(index).getNome() == asDeEspadas.getNome());
+				}
+				else {
+					
+					atual.showMaoDeCartas();
+					index = atual.selecionaCarta(); 
+				}
+				
+				proximo.recebeCarta(atual.passaCarta(index));
+				
+				if (atual.estaBatido()) {
+				
+					Jogador anterior;
+					if (i == 0) {
+					
+						anterior = jogadores.get(numDeJogadores() - 1);
+					}
+					else {
+						
+						anterior = jogadores.get(i - 1);
+					}
+					
+					setVencedor(atual);
+					setPerdedor(anterior);			
+					jogoAcabou = true;
+					break;
+				}
+			}
+		}
+	}
+	
 	public void setVencedor(Jogador j)
 	{
 		this.vencedor = j;
@@ -74,72 +152,3 @@ public class Jogo {
 		System.out.println("******************");
 	}
 }
-=======
-package jogo;
-
-public class Jogo {
-
-	int num_jogadores;
-	Jogador[] jogadores;
-	boolean jogo_acabou;
-	int jogador_da_vez;
-	Jogador vencedor;
-	Jogador perdedor;
-
-	public Jogo () {
-		
-		
-		
-	}
-	
-	public void iniciaJogo () {
-		
-		
-	}
-	
-	public boolean jogoNaoAcabou () {
-		
-		return !jogo_acabou;
-	}
-	
-	public void setFimDeJogo () {
-		
-		this.jogo_acabou = true;
-	}
-	
-	public void incrementaJogadorDaVez () {
-		
-		this.jogador_da_vez = (this.jogador_da_vez)%(this.num_jogadores) + 1;
-	}
-	
-	public Jogador proximoJogador () {
-		
-		int aux = (this.jogador_da_vez)%(this.num_jogadores) + 1;
-		return this.jogadores[aux];
-	}
-	
-	public Jogador jogadorAtual () {
-		
-		int aux = (this.jogador_da_vez);
-		return this.jogadores[aux];
-	}
-
-	public Jogador jogadorAnterior () {
-	
-		int aux;
-		if (this.jogador_da_vez == 1) aux = this.num_jogadores;
-		else aux = this.jogador_da_vez - 1;
-		return this.jogadores[aux];
-	}
-	
-	public void setVencedor(Jogador aux) {
-		
-		this.vencedor = aux;
-	}
-	
-	public void setPerdedor(Jogador aux) {
-		
-		this.perdedor = aux;
-	}
-}
->>>>>>> 7daf9a106d18229805262cc9eff1637803776ecd

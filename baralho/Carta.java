@@ -1,26 +1,34 @@
 package baralho;
 
-public class Carta {
+public class Carta extends miscelania.DoubleIdentifiedObject{
 	//Atributos
-	private int numero;
-	private String naipe;
+	private String valor;				//numero
+	private String nome;				//naipe
 	
-	//Métodos
+	//Metodos
 	
-	public int getNumero() {
-		return numero;
+	public void setValor(String s) {
+
+		this.valor = s;
+	}
+
+	public void setNome(String s) {
+
+		this.nome = s;
 	}
 	
-	public void setNumero(int numero) {
-		this.numero = numero;
+	public String getNome() {
+		
+		return nome;
+	}
+		
+	public String getValor() {
+		
+		return this.valor;
 	}
 	
 	public String getNaipe() {
-		return naipe;
+
+		return this.getNome();
 	}
-	
-	public void setNaipe(String naipe) {
-		this.naipe = naipe;
-	}
-	
 }
